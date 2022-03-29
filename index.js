@@ -1,10 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 app.use(cors());
 app.use(express.json());
-
 const port = 5000;
 
 //user: mydb
@@ -41,6 +40,16 @@ async function run() {
           console.log('hitting the post',req.body);
           console.log('added in database',result);;
           res.json(result);
+
+      })
+      //delete api
+      app.delete('/users/:id',async(req,res)=>{
+          const id = req.params.id;
+          const query = {_id: ObjectId(id)};
+          const result = await userCollection.deleteOne(query);
+          console.log(result);
+          res.json(result);
+
 
       })
     } finally {
