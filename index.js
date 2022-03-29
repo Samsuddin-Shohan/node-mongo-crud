@@ -1,6 +1,10 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const { MongoClient, ServerApiVersion } = require('mongodb');
+app.use(cors());
+app.use(express.json());
+
 const port = 5000;
 
 //user: mydb
@@ -23,14 +27,24 @@ async function run() {
     try {
       await client.connect();
       const database = client.db('users');
-      const users = database.collection('userDocuments');
-      // Query for a movie that has the title 'Back to the Future'
-      const user = { name:'specaial',email:'special@gmail.com'};
-      const result = await users.insertOne(user);
-      console.log(result);
+      const userCollection = database.collection('userDocuments');
+      //get api
+      app.get('/users',async(req,res)=>{
+          const cursors = userCollection.find({});
+          const users = await cursors.toArray();
+          res.send(users);
+      })
+      //post api
+      app.post('/users',async(req,res)=>{
+          const newUser = req.body;
+          const result = await userCollection.insertOne(newUser);
+          console.log('hitting the post',req.body);
+          console.log('added in database',result);;
+          res.json(result);
+
+      })
     } finally {
-      // Ensures that the client will close when you finish/error
-      await client.close();
+    //   await client.close();
     }
   }
   run().catch(console.dir);
