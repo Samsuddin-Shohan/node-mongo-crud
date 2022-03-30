@@ -33,12 +33,22 @@ async function run() {
           const users = await cursors.toArray();
           res.send(users);
       })
+      app.get('/users/:id',async(req,res)=>{
+          const id = req.params.id;
+          console.log(id);
+          const query = {_id: ObjectId(id)};
+          const user =await userCollection.findOne(query);
+          console.log(user);
+          res.json(user);
+
+        //   console.log(id);
+      })
       //post api
       app.post('/users',async(req,res)=>{
           const newUser = req.body;
           const result = await userCollection.insertOne(newUser);
-          console.log('hitting the post',req.body);
-          console.log('added in database',result);;
+        //   console.log('hitting the post',req.body);
+        //   console.log('added in database',result);;
           res.json(result);
 
       })
@@ -47,7 +57,7 @@ async function run() {
           const id = req.params.id;
           const query = {_id: ObjectId(id)};
           const result = await userCollection.deleteOne(query);
-          console.log(result);
+        //   console.log(result);
           res.json(result);
 
 
