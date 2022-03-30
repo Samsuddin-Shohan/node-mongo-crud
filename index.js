@@ -35,10 +35,10 @@ async function run() {
       })
       app.get('/users/:id',async(req,res)=>{
           const id = req.params.id;
-          console.log(id);
+          //console.log(id);
           const query = {_id: ObjectId(id)};
           const user =await userCollection.findOne(query);
-          console.log(user);
+          //console.log(user);
           res.json(user);
 
         //   console.log(id);
@@ -46,6 +46,7 @@ async function run() {
       //post api
       app.post('/users',async(req,res)=>{
           const newUser = req.body;
+          console.log(newUser);
           const result = await userCollection.insertOne(newUser);
         //   console.log('hitting the post',req.body);
         //   console.log('added in database',result);;
