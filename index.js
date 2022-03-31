@@ -46,7 +46,7 @@ async function run() {
       //post api
       app.post('/users',async(req,res)=>{
           const newUser = req.body;
-          console.log(newUser);
+          //console.log(newUser);
           const result = await userCollection.insertOne(newUser);
         //   console.log('hitting the post',req.body);
         //   console.log('added in database',result);;
@@ -61,6 +61,23 @@ async function run() {
         //   console.log(result);
           res.json(result);
 
+
+      })
+      app.put('/users/:id',async(req,res)=>{
+        const id = req.params.id;
+        const updatedUser = req.body;
+        const filter = { _id: ObjectId(id)};
+        const options = { upsert: true };
+        //const result = await userCollection.updateOne()
+
+        const updateDoc = {
+          $set: {
+            name: updatedUser.name,
+            email:updatedUser.email
+          },
+        };
+        const result = await userCollection.updateOne(filter, updateDoc, options);
+        res.send(result)
 
       })
     } finally {
